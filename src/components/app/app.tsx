@@ -120,7 +120,7 @@ function App(): JSX.Element {
           <h2>Цена</h2>
           <p>
             <label>
-          От
+              От
               <input
                 type="text"
                 name="priceFrom"
@@ -132,7 +132,7 @@ function App(): JSX.Element {
           </p>
           <p>
             <label>
-          До
+              До
               <input
                 type="text"
                 name="priceUpTo"
@@ -147,39 +147,45 @@ function App(): JSX.Element {
         <section className='flight-list'>
           <h2 className='visually-hidden'>Список рейсов</h2>
           <div className="flight-card">
-            <p>
-              21049 Р
-            </p>
-            <p>
-              Стоимость для одного взрослого пассажира
-            </p>
-            <p>
-              Москва, ШЕРЕМЕТЬЕВО (SVO) - ЛОНДОН, Лондон, Хитроу (LHR)
-            </p>
-            <p>
-              20:40 18 авг. вт 14 ч 45 мин 19 авг. ср 09:25
-            </p>
-            <p>
-              1 пересадка
-            </p>
-            <p>
-              Рейс выполняет: LOT Polish Airlines
-            </p>
-            <p>
-              ЛОНДОН, Лондон, Хитроу (LHR) - Москва, ШЕРЕМЕТЬЕВО (SVO)
-            </p>
-            <p>
-            18:10 19 авг. ср 23 ч 35 мин 20 авг. чт 19:45
-            </p>
-            <p>
-            1 пересадка
-            </p>
-            <p>
-              Рейс выполняет: LOT Polish Airlines
-            </p>
+            <div className="card-title">
+              <p>
+                21049 ₽
+              </p>
+              <p>
+                Стоимость для одного взрослого пассажира
+              </p>
+            </div>
+            <div className='card-leg'>
+              <p>
+                Москва, ШЕРЕМЕТЬЕВО (SVO) - ЛОНДОН, Лондон, Хитроу (LHR)
+              </p>
+              <p>
+                20:40 18 авг. вт 14 ч 45 мин 19 авг. ср 09:25
+              </p>
+              <p>
+                1 пересадка
+              </p>
+              <p>
+                Рейс выполняет: LOT Polish Airlines
+              </p>
+            </div>
+            <div className='card-leg'>
+              <p>
+                ЛОНДОН, Лондон, Хитроу (LHR) - Москва, ШЕРЕМЕТЬЕВО (SVO)
+              </p>
+              <p>
+                18:10 19 авг. ср 23 ч 35 мин 20 авг. чт 19:45
+              </p>
+              <p>
+                1 пересадка
+              </p>
+              <p>
+                Рейс выполняет: LOT Polish Airlines
+              </p>
+            </div>
             <button type="button">ВЫБРАТЬ</button>
           </div>
-
+          <button type="button">Показать еще</button>
         </section>
       </div>
     </main>
