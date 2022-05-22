@@ -145,10 +145,43 @@ function App(): JSX.Element {
           <CarriersList  filters={filters}/>
         </section>
         <section className='flight-list'>
-          <h2>flight-list</h2>
+          <h2 className='visually-hidden'>Список рейсов</h2>
+          <div className="flight-card">
+            <p>
+              21049 Р
+            </p>
+            <p>
+              Стоимость для одного взрослого пассажира
+            </p>
+            <p>
+              Москва, ШЕРЕМЕТЬЕВО (SVO) - ЛОНДОН, Лондон, Хитроу (LHR)
+            </p>
+            <p>
+              20:40 18 авг. вт 14 ч 45 мин 19 авг. ср 09:25
+            </p>
+            <p>
+              1 пересадка
+            </p>
+            <p>
+              Рейс выполняет: LOT Polish Airlines
+            </p>
+            <p>
+              ЛОНДОН, Лондон, Хитроу (LHR) - Москва, ШЕРЕМЕТЬЕВО (SVO)
+            </p>
+            <p>
+            18:10 19 авг. ср 23 ч 35 мин 20 авг. чт 19:45
+            </p>
+            <p>
+            1 пересадка
+            </p>
+            <p>
+              Рейс выполняет: LOT Polish Airlines
+            </p>
+            <button type="button">ВЫБРАТЬ</button>
+          </div>
+
         </section>
       </div>
-
     </main>
   );
 }
