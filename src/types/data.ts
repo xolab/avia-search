@@ -1,9 +1,9 @@
 export type Data = {
-  id: string,
-  legFrom: [],
-  legTo: [],
+  id: number,
+  legFrom: any[],
+  legTo: any[],
   name: string,
-  price: string,
+  price: number,
   totalDuration: number,
   totalSegments: number,
 }

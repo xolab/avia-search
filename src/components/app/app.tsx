@@ -1,6 +1,9 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Filters, SortOrder} from '../../const';
+import {Data} from '../../types/data';
+import {getArrayFlights, getFilterList} from '../../utils/utils';
 import CarriersList from '../carriers-list/carriers-list';
+import FlightsList from '../flights-list/flights-list';
 import './app.css';
 
 enum NumberSegments {
@@ -9,12 +12,36 @@ enum NumberSegments {
 }
 
 function App(): JSX.Element {
+  const [listFlight, setListFlight] = useState<Data[]>([]);
+  const [filteredList, setFilteredList] = useState<Data[]>([]);
   const [filters, setFilters] = useState<Filters>({
     sortOrder: SortOrder.PRICEUP,
     numberSegments: [],
     priceFrom: '',
     priceUpTo: '',
   });
+
+  // console.log(listFlight);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setFilteredList(getFilterList(listFlight, filters));
+  }, [filters, listFlight]);
+
+  const fetchData = async () => {
+    await fetch('./flights.json')
+      .then((responce) => responce.json())
+      .then((flights) => {
+        // console.log('list:', flights.result.flights);
+        setListFlight(getArrayFlights(flights.result.flights));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleSortOrder = (evt: any) => {
     const {value} = evt.target;
@@ -142,50 +169,10 @@ function App(): JSX.Element {
               />
             </label>
           </p>
-          <CarriersList  filters={filters}/>
+          <CarriersList filteredList={filteredList}/>
         </section>
-        <section className='flight-list'>
-          <h2 className='visually-hidden'>Список рейсов</h2>
-          <div className="flight-card">
-            <div className="card-title">
-              <p>
-                21049 ₽
-              </p>
-              <p>
-                Стоимость для одного взрослого пассажира
-              </p>
-            </div>
-            <div className='card-leg'>
-              <p>
-                Москва, ШЕРЕМЕТЬЕВО (SVO) - ЛОНДОН, Лондон, Хитроу (LHR)
-              </p>
-              <p>
-                20:40 18 авг. вт 14 ч 45 мин 19 авг. ср 09:25
-              </p>
-              <p>
-                1 пересадка
-              </p>
-              <p>
-                Рейс выполняет: LOT Polish Airlines
-              </p>
-            </div>
-            <div className='card-leg'>
-              <p>
-                ЛОНДОН, Лондон, Хитроу (LHR) - Москва, ШЕРЕМЕТЬЕВО (SVO)
-              </p>
-              <p>
-                18:10 19 авг. ср 23 ч 35 мин 20 авг. чт 19:45
-              </p>
-              <p>
-                1 пересадка
-              </p>
-              <p>
-                Рейс выполняет: LOT Polish Airlines
-              </p>
-            </div>
-            <button type="button">ВЫБРАТЬ</button>
-          </div>
-          <button type="button">Показать еще</button>
+        <section className='flights-list'>
+          <FlightsList listFlight={listFlight}/>
         </section>
       </div>
     </main>
