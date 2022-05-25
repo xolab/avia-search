@@ -1,4 +1,4 @@
-export type Data = {
+export type FlightData = {
   id: number,
   legFrom: any[],
   legTo: any[],

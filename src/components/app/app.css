@@ -1,10 +1,49 @@
 .page-container {
   display: flex;
   width: 1200px;
-  padding: 0 20px;
-  margin: 0 auto;
+  padding: 20px 20px;
+  font-size: 14px;
 }
 
 .page-sort {
-  margin-right: 40px;
+  max-width: 200px;
+  margin-top: 25px;
+  margin-right: 60px;
+}
+
+.flights-list {
+  max-width: 640px;
+}
+
+.sort__title,
+.filters__title,
+.prices__title,
+.carriers__title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.sort__list {
+  margin-bottom: 40px;
+}
+
+.sort__item,
+.filters__item {
+  margin-bottom: -5px;
+}
+
+.filters__list {
+  margin-bottom: 18px;
+}
+
+.prices__item {
+  display: flex;
+}
+
+.prices__from--input {
+  font-size: 14px;
+  width: 100%;
+  margin-left: 5px;
+  margin-bottom: 15px;
 }

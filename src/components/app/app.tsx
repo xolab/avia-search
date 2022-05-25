@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
-import {Filters, SortOrder} from '../../const';
-import {Data} from '../../types/data';
-import {getArrayFlights, getFilterList} from '../../utils/utils';
+import {useEffect, useMemo, useState} from 'react';
+import {CommonFilters, FlightFilters, SortOrder} from '../../const';
+import {FlightData} from '../../types/flightData';
+import {getArrayFlights, useCarriersList, useFlightsList} from '../../utils/utils';
 import CarriersList from '../carriers-list/carriers-list';
 import FlightsList from '../flights-list/flights-list';
 import './app.css';
@@ -12,24 +12,42 @@ enum NumberSegments {
 }
 
 function App(): JSX.Element {
-  const [listFlight, setListFlight] = useState<Data[]>([]);
-  const [filteredList, setFilteredList] = useState<Data[]>([]);
-  const [filters, setFilters] = useState<Filters>({
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const [carriersSelected, setCarriersSelected] = useState<Record<string, boolean>>({});
+
+  const handleCarrierSelect = (name: string, checked: boolean) => {
+    setCarriersSelected((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
+
+  const [listFlight, setListFlight] = useState<FlightData[]>([]);
+  const [carrierFilters, setCarrierFilters] = useState<CommonFilters>({
     sortOrder: SortOrder.PRICEUP,
     numberSegments: [],
     priceFrom: '',
     priceUpTo: '',
   });
 
-  // console.log(listFlight);
+  const carriersList = useCarriersList(listFlight, carrierFilters);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const flightFilters = useMemo((): FlightFilters => {
 
-  useEffect(() => {
-    setFilteredList(getFilterList(listFlight, filters));
-  }, [filters, listFlight]);
+    const carrierNames = Object.keys(carriersSelected).filter((name) =>
+      carriersSelected[name] &&
+      carriersList.find((group) => group.name === name && group.enabled));
+
+    return {
+      ...carrierFilters,
+      carrierNames,
+    };
+  }, [carrierFilters, carriersSelected, carriersList]);
+
+  const flightsListFiltered = useFlightsList(listFlight, flightFilters);
 
   const fetchData = async () => {
     await fetch('./flights.json')
@@ -45,23 +63,23 @@ function App(): JSX.Element {
 
   const handleSortOrder = (evt: any) => {
     const {value} = evt.target;
-    setFilters({
-      ...filters,
+    setCarrierFilters({
+      ...carrierFilters,
       sortOrder: value,
     });
   };
 
   const handleNumberSegment = (evt: any) => {
     const {name} = evt.target;
-    const {numberSegments} = filters;
+    const {numberSegments} = carrierFilters;
     if(numberSegments.includes(String(name))) {
-      setFilters({
-        ...filters,
+      setCarrierFilters({
+        ...carrierFilters,
         numberSegments: numberSegments.filter((item) => item !== String(name)),
       });
     } else {
-      setFilters({
-        ...filters,
+      setCarrierFilters({
+        ...carrierFilters,
         numberSegments: [...numberSegments, String(name)],
       });
     }
@@ -69,8 +87,8 @@ function App(): JSX.Element {
 
   const handlePrice = (evt: any) => {
     const {name, value} = evt.target;
-    setFilters({
-      ...filters,
+    setCarrierFilters({
+      ...carrierFilters,
       [name]: value,
     });
   };
@@ -80,15 +98,15 @@ function App(): JSX.Element {
       <h1 className='visually-hidden'>Система подбора авиабилетов Avia Search</h1>
       <div className="page-container">
         <section className='page-sort'>
-          <h2>Сортировать</h2>
-          <ul>
-            <li>
+          <h2 className="sort__title">Сортировать</h2>
+          <ul className="sort__list">
+            <li className="sort__item">
               <label>
                 <input
                   type="radio"
                   name="sort"
                   value={SortOrder.PRICEUP}
-                  checked={filters.sortOrder === SortOrder.PRICEUP}
+                  checked={carrierFilters.sortOrder === SortOrder.PRICEUP}
                   onChange={handleSortOrder}
                 />
             - по возрастанию цены
@@ -100,7 +118,7 @@ function App(): JSX.Element {
                   type="radio"
                   name="sort"
                   value={SortOrder.PRICEDOWN}
-                  checked={filters.sortOrder === SortOrder.PRICEDOWN}
+                  checked={carrierFilters.sortOrder === SortOrder.PRICEDOWN}
                   onChange={handleSortOrder}
                 />
             - по убыванию цены
@@ -112,21 +130,21 @@ function App(): JSX.Element {
                   type="radio"
                   name="sort"
                   value={SortOrder.DURATION}
-                  checked={filters.sortOrder === SortOrder.DURATION}
+                  checked={carrierFilters.sortOrder === SortOrder.DURATION}
                   onChange={handleSortOrder}
                 />
             - по времени в пути
               </label>
             </li>
           </ul>
-          <h2>Фильтровать</h2>
-          <ul>
-            <li>
+          <h2 className="filters__title">Фильтровать</h2>
+          <ul className="filters__list">
+            <li className="filters__item">
               <label>
                 <input
                   type="checkbox"
                   name={NumberSegments.ONESEGMENT}
-                  checked={filters.numberSegments.includes(NumberSegments.ONESEGMENT)}
+                  checked={carrierFilters.numberSegments.includes(NumberSegments.ONESEGMENT)}
                   onChange={handleNumberSegment}
                 />
             - 1 пересадка
@@ -137,42 +155,47 @@ function App(): JSX.Element {
                 <input
                   type="checkbox"
                   name={NumberSegments.NOSEGMENTS}
-                  checked={filters.numberSegments.includes(NumberSegments.NOSEGMENTS)}
+                  checked={carrierFilters.numberSegments.includes(NumberSegments.NOSEGMENTS)}
                   onChange={handleNumberSegment}
                 />
             - без пересадок
               </label>
             </li>
           </ul>
-          <h2>Цена</h2>
-          <p>
-            <label>
+          <h2 className="prices__title">Цена</h2>
+          <p className="prices__item">
+            <label htmlFor="priceFrom">
               От
-              <input
-                type="text"
-                name="priceFrom"
-                placeholder='0'
-                value={filters.priceFrom}
-                onChange={handlePrice}
-              />
             </label>
+            <input
+              className="prices__from--input"
+              id="priceFrom"
+              type="text"
+              name="priceFrom"
+              placeholder='0'
+              value={carrierFilters.priceFrom}
+              onChange={handlePrice}
+            />
           </p>
-          <p>
-            <label>
+          <p className="prices__item">
+            <label htmlFor="priceUpTo">
               До
-              <input
-                type="text"
-                name="priceUpTo"
-                placeholder='1000000'
-                value={filters.priceUpTo}
-                onChange={handlePrice}
-              />
             </label>
+            <input
+              className="prices__from--input"
+              id="priceUpTo"
+              type="text"
+              name="priceUpTo"
+              placeholder="1000000"
+              value={carrierFilters.priceUpTo}
+              onChange={handlePrice}
+            />
           </p>
-          <CarriersList filteredList={filteredList}/>
+          <h2 className="carriers__title">Авиакомпании ({carriersList.length} шт.)</h2>
+          <CarriersList carriersList={carriersList} carriersSelected={carriersSelected} onCheck={handleCarrierSelect} />
         </section>
-        <section className='flights-list'>
-          <FlightsList listFlight={listFlight}/>
+        <section className="flights-list">
+          <FlightsList listFlight={flightsListFiltered}/>
         </section>
       </div>
     </main>

@@ -4,9 +4,19 @@ export enum SortOrder {
   DURATION ='duration',
 }
 
-export type Filters = {
+export type CommonFilters = {
   sortOrder: SortOrder,
   numberSegments: string[],
   priceFrom: string,
   priceUpTo: string,
 }
+
+export type Carrier = {
+  name: string;
+  price: number;
+  enabled: boolean;
+};
+
+export type FlightFilters = CommonFilters & {
+  carrierNames: string[];
+};

@@ -1,79 +1,89 @@
 import {useState} from 'react';
-import {Data} from '../../types/data';
+import {FlightData} from '../../types/flightData';
+import {getAdaptCardFlightList} from '../../utils/utils';
+import './flights-list.css';
 
-type ComponentProps = {
-  listFlight: Data[],
+type Props = {
+  listFlight: FlightData[],
 }
 
-function FlightsList({listFlight}: ComponentProps): JSX.Element {
+function FlightsList({listFlight}: Props): JSX.Element {
   const [showMore, setShowMore] = useState(2);
+  console.log((listFlight));
 
   return (
     <>
       <h2 className='visually-hidden'>Список рейсов</h2>
       <ul>
-        {listFlight
-          .slice(0, showMore)
-          .map((item: Data) => {
-            const {id, legFrom, legTo, price, totalDuration} = item;
+        {getAdaptCardFlightList(listFlight)
+          //.slice(0, showMore)
+          .map((item: any) => {
             const {
-              airline: airlinelegTo,
-              departureCity: departureCitylegTo,
-              departureAirport: departureAirportlegTo,
-            } = legTo[0];
-            const {arrivalCity: arrivalCitylegTo, arrivalAirport: arrivalAirportlegTo} = legTo[1];
-            const {
-              airline: airlinelegFrom,
-              departureCity: departureCitylegFrom,
-              departureAirport: departureAirportlegFrom,
-            } = legFrom[0];
-            const {arrivalCity: arrivalCitylegFrom, arrivalAirport: arrivalAirportlegFrom} = legFrom[1];
+              id,
+              priceFlight,
+              legToAirline,
+              legToSegmentsNumber,
+              legToDepartureCity,
+              legToDepartureAirport,
+              legToDepartureDate,
+              legToArrivalCity,
+              legToArrivalAirport,
+              legToArrivalDate,
+              legFromAirline,
+              legFromSegmentsNumber,
+              legFromDepartureCity,
+              legFromDepartureAirport,
+              legFromDepartureDate,
+              legFromArrivalCity,
+              legFromArrivalAirport,
+              legFromArrivalDate,
+            } = item;
 
             return (
               <li className="flight-card" key={id}>
-                <div className="card-title">
-                  <p>
-                    {price} ₽
+                <div className="card__title">
+                  <p className="card__title--price">
+                    {priceFlight} ₽
                   </p>
-                  <p>
+                  <p className="card__title--text">
                     Стоимость для одного взрослого пассажира
                   </p>
                 </div>
-                <div className='card-leg'>
-                  <p>
-                    {departureCitylegTo.caption}, {departureAirportlegTo.caption} ({departureAirportlegTo.uid}) - {arrivalCitylegTo.caption}, {arrivalAirportlegTo.caption}, ({arrivalAirportlegTo.uid})
+                <div className="card__leg">
+                  <p className="card__leg--title">
+                    {legToDepartureCity.caption}, {legToDepartureAirport.caption} ({legToDepartureAirport.uid}) - {legToArrivalCity.caption}, {legToArrivalAirport.caption}, ({legToArrivalAirport.uid})
                   </p>
-                  <p>
-                    20:40 18 авг. вт 14 ч 45 мин 19 авг. ср 09:25
+                  <p className="card__leg--date">
+                    {legToDepartureDate} - {legToArrivalDate}
                   </p>
-                  <p>
-                    {legTo.length - 1} пересадка
+                  <p className="card__leg--segments">
+                    {legToSegmentsNumber} пересадка
                   </p>
-                  <p>
-                    Рейс выполняет: {airlinelegTo.caption}
-                  </p>
-                </div>
-                <div className='card-leg'>
-                  <p>
-                    ЛОНДОН, Лондон, Хитроу (LHR) - Москва, ШЕРЕМЕТЬЕВО (SVO)
-                    {departureCitylegFrom.caption}, {departureAirportlegFrom.caption}, ({departureAirportlegFrom.uid}) - {arrivalCitylegFrom.caption}, {arrivalAirportlegFrom.caption} ({arrivalAirportlegFrom.uid})
-                  </p>
-                  <p>
-                    18:10 19 авг. ср 23 ч 35 мин 20 авг. чт 19:45
-                  </p>
-                  <p>
-                    1 пересадка
-                  </p>
-                  <p>
-                    Рейс выполняет: {airlinelegFrom.caption}
+                  <p className="card__leg--airline">
+                    Рейс выполняет: {legToAirline.caption}
                   </p>
                 </div>
-                <button type="button">ВЫБРАТЬ</button>
+                <div className='card__leg'>
+                  <p className="card__leg--title">
+                    {legFromDepartureCity.caption}, {legFromDepartureAirport.caption}, ({legFromDepartureAirport.uid}) - {legFromArrivalCity.caption}, {legFromArrivalAirport.caption} ({legFromArrivalAirport.uid})
+                  </p>
+                  <p className="card__leg--date">
+                    {legFromDepartureDate} - {legFromArrivalDate}
+                  </p>
+                  <p className="card__leg--segments">
+                    {legFromSegmentsNumber - 1} пересадка
+                  </p>
+                  <p className="card__leg--airline">
+                    Рейс выполняет: {legFromAirline.caption}
+                  </p>
+                </div>
+                <button className="button-select" type="button">ВЫБРАТЬ</button>
               </li>
             );
           })}
         {showMore < listFlight.length && (
           <button
+            className="button-more"
             type="button"
             onClick={() => setShowMore(showMore + 2)}
           >

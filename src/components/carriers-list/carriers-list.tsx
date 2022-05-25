@@ -1,28 +1,33 @@
-import {Data} from '../../types/data';
+import {CarrierGroup} from '../../utils/utils';
 
-type ComponentProps = {
-  filteredList: Data[],
-}
+type Props = {
+  carriersList: CarrierGroup[],
+  carriersSelected: Record<string, boolean>,
+  onCheck: (name: string, checked: boolean) => void;
+};
 
-function CarriersList({filteredList}: ComponentProps): JSX.Element {
+function CarriersList({carriersList, carriersSelected, onCheck}: Props) {
   return (
-    <>
-      <h2>Авиакомпании ({filteredList.length} шт.)</h2>
-      <ul>
-        {filteredList.map((item: Data) => {
-          const {id, legFrom, legTo, name, price, totalDuration} = item;
+    <ul>
+      {carriersList.map((item) => {
+        const {name, enabled, minPrice} = item;
 
-          return (
-            <li key={id}>
-              <label>
-                <input type="checkbox" name="nameCompany" />
-                {`- ${name} от ${price} р.`}
-              </label>
-            </li>
-          );
-        })}
-      </ul>
-    </>
+        return (
+          <li key={name}>
+            <label>
+              <input
+                type="checkbox"
+                name="nameCompany"
+                disabled={!enabled}
+                checked={Boolean(carriersSelected[name])}
+                onChange={(event) => onCheck(name, event.target.checked)}
+              />
+              {`- ${name} от ${minPrice} р.`}
+            </label>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
