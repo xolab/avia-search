@@ -16,7 +16,7 @@ function FlightsList({listFlight}: Props): JSX.Element {
       <h2 className='visually-hidden'>Список рейсов</h2>
       <ul>
         {getAdaptCardFlightList(listFlight)
-          //.slice(0, showMore)
+          // .slice(0, showMore)
           .map((item: any) => {
             const {
               id,
@@ -77,7 +77,7 @@ function FlightsList({listFlight}: Props): JSX.Element {
                     Рейс выполняет: {legFromAirline.caption}
                   </p>
                 </div>
-                <button className="button-select" type="button">ВЫБРАТЬ</button>
+                <button className="button-select" type="button">Выбрать</button>
               </li>
             );
           })}

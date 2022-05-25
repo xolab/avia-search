@@ -1,6 +1,6 @@
 .page-container {
   display: flex;
-  width: 1200px;
+  width: 1090px;
   padding: 20px 20px;
   font-size: 14px;
 }
@@ -21,29 +21,39 @@
 .carriers__title {
   font-size: 14px;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .sort__list {
-  margin-bottom: 40px;
+  margin-bottom: 42px;
 }
 
 .sort__item,
 .filters__item {
-  margin-bottom: -5px;
+  margin-bottom: -2px;
 }
 
 .filters__list {
   margin-bottom: 18px;
 }
 
+.prices__title {
+  margin-bottom: 15px;
+}
+
 .prices__item {
   display: flex;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .prices__from--input {
   font-size: 14px;
   width: 100%;
   margin-left: 5px;
-  margin-bottom: 15px;
+}
+
+.carriers__title {
+  margin-top: 20px;
+  margin-bottom: 12px;
 }

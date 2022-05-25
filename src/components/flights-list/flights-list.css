@@ -1,16 +1,71 @@
+.flight-card {
+  font-size: 16px;
+  width: 640px;
+  margin-bottom: 27px;
+}
+
 .card__title {
   padding: 5px;
   background-color: #0087c9;
 }
 
-.card__title--price {
+.card__title--price,
+.card__title--text {
+  color: white;
   font-size: 20px;
+  text-align: end;
+  padding-right: 15px;
+}
+
+.card__title--price {
+  font-weight: 700;;
+}
+
+.card__title--text {
+  font-size: 10px;
   text-align: end;
 }
 
+.card__leg {
+  border-bottom: 3px solid #0087c9;
+}
 
+.card__leg--title {
+  padding: 10px;
+  border-bottom: 1px solid grey;
+}
 
+.card__leg--date {
+  font-size: 18px;
+  text-align: center;
+  padding-top: 14px;
+  padding-bottom: 6px;
+}
+
+.card__leg--segments {
+  text-align: center;
+  padding-bottom: 14px;
+}
+
+.card__leg--airline {
+  padding-bottom: 10px;
+}
 
 .button-select {
+  display: block;
+  width: 100%;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-top: -2px;
   background-color: #ffb168;
+}
+
+.button-more {
+  display: block;
+  padding: 4px 60px;
+  margin: 0 auto;
+  margin-top: -14px;
 }

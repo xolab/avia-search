@@ -112,7 +112,7 @@ function App(): JSX.Element {
             - по возрастанию цены
               </label>
             </li>
-            <li>
+            <li className="sort__item">
               <label>
                 <input
                   type="radio"
@@ -124,7 +124,7 @@ function App(): JSX.Element {
             - по убыванию цены
               </label>
             </li>
-            <li>
+            <li className="sort__item">
               <label>
                 <input
                   type="radio"
