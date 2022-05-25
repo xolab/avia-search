@@ -18,7 +18,7 @@
 }
 
 .card__title--price {
-  font-weight: 700;;
+  font-weight: 500;;
 }
 
 .card__title--text {
@@ -43,11 +43,33 @@
 }
 
 .card__leg--segments {
+  position: relative;
   text-align: center;
-  padding-bottom: 14px;
+}
+
+.card__leg--segments::before {
+  position: absolute;
+  width: 220px;
+  height: 1px;
+  top: 10px;
+  left: 45px;;
+  background-color: grey;
+  content: '';
+}
+
+.card__leg--segments::after {
+  position: absolute;
+  width: 220px;
+  height: 1px;
+  top: 10px;
+  right: 45px;;
+  background-color: grey;
+  content: '';
 }
 
 .card__leg--airline {
+  padding-top: 14px;
+  padding-left: 10px;
   padding-bottom: 10px;
 }
 
@@ -61,6 +83,7 @@
   padding-bottom: 8px;
   margin-top: -2px;
   background-color: #ffb168;
+  border: none;
 }
 
 .button-more {

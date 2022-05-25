@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/react-dom": "^18.0.4",
+    "dayjs": "^1.11.2",
     "history": "^5.2.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",

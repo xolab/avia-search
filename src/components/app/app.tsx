@@ -1,7 +1,6 @@
 import {useEffect, useMemo, useState} from 'react';
-import {CommonFilters, FlightFilters, SortOrder} from '../../const';
-import {FlightData} from '../../types/flightData';
-import {getArrayFlights, useCarriersList, useFlightsList} from '../../utils/utils';
+import {CommonFilters, FlightData, FlightFilters, SortOrder} from '../../types';
+import {getArrayFlights, useCarriersList} from '../../utils/utils';
 import CarriersList from '../carriers-list/carriers-list';
 import FlightsList from '../flights-list/flights-list';
 import './app.css';
@@ -46,8 +45,6 @@ function App(): JSX.Element {
       carrierNames,
     };
   }, [carrierFilters, carriersSelected, carriersList]);
-
-  const flightsListFiltered = useFlightsList(listFlight, flightFilters);
 
   const fetchData = async () => {
     await fetch('./flights.json')
@@ -195,7 +192,7 @@ function App(): JSX.Element {
           <CarriersList carriersList={carriersList} carriersSelected={carriersSelected} onCheck={handleCarrierSelect} />
         </section>
         <section className="flights-list">
-          <FlightsList listFlight={flightsListFiltered}/>
+          <FlightsList listFlight={listFlight} filters={flightFilters} />
         </section>
       </div>
     </main>

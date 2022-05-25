@@ -1,23 +1,31 @@
-import {useState} from 'react';
-import {FlightData} from '../../types/flightData';
-import {getAdaptCardFlightList} from '../../utils/utils';
+import dayjs from 'dayjs';
+import {memo, useEffect, useState} from 'react';
+import {FlightData, FlightFilters} from '../../types';
+import {getDurationFormated, useFlightsList} from '../../utils/utils';
 import './flights-list.css';
 
 type Props = {
-  listFlight: FlightData[],
+  listFlight: FlightData[];
+  filters: FlightFilters;
 }
 
-function FlightsList({listFlight}: Props): JSX.Element {
-  const [showMore, setShowMore] = useState(2);
-  console.log((listFlight));
+const SHOW_MORE_CNT = 2;
+
+const FlightsList = memo(({listFlight, filters}: Props) => {
+  const [showCount, setShowCount] = useState(SHOW_MORE_CNT);
+
+  const { list, showMore, totalFiltered } = useFlightsList(listFlight, filters, showCount);
+
+  useEffect(() => {
+    setShowCount(SHOW_MORE_CNT);
+  }, [listFlight, filters]);
 
   return (
     <>
-      <h2 className='visually-hidden'>Список рейсов</h2>
+      <h2 className='visually-hidden'>Список рейсов: {totalFiltered}</h2>
       <ul>
-        {getAdaptCardFlightList(listFlight)
-          // .slice(0, showMore)
-          .map((item: any) => {
+        {list
+          .map((item) => {
             const {
               id,
               priceFlight,
@@ -51,13 +59,22 @@ function FlightsList({listFlight}: Props): JSX.Element {
                 </div>
                 <div className="card__leg">
                   <p className="card__leg--title">
-                    {legToDepartureCity.caption}, {legToDepartureAirport.caption} ({legToDepartureAirport.uid}) - {legToArrivalCity.caption}, {legToArrivalAirport.caption}, ({legToArrivalAirport.uid})
+                    {legToDepartureCity.caption}, {legToDepartureAirport.caption} ({legToDepartureAirport.uid}) &rarr; {legToArrivalCity.caption}, {legToArrivalAirport.caption}, ({legToArrivalAirport.uid})
                   </p>
                   <p className="card__leg--date">
-                    {legToDepartureDate} - {legToArrivalDate}
+                    {dayjs(legToDepartureDate).format('HH:mm')} {' '}
+                    {dayjs(legToDepartureDate).format('DD MMM')} {' '}
+                    {dayjs(legToDepartureDate).format('dd')}
+                    &emsp;&#128339;&emsp;
+                    {getDurationFormated(legToDepartureDate, legToArrivalDate)} &emsp;
+                    {dayjs(legToArrivalDate).format('DD MMM')} {' '}
+                    {dayjs(legToArrivalDate).format('dd')} {' '}
+                    {dayjs(legToArrivalDate).format('HH:mm')}
                   </p>
                   <p className="card__leg--segments">
-                    {legToSegmentsNumber} пересадка
+                    {legToSegmentsNumber === 0
+                      ? '-------------------------'
+                      : `${legToSegmentsNumber} пересадка`}
                   </p>
                   <p className="card__leg--airline">
                     Рейс выполняет: {legToAirline.caption}
@@ -65,13 +82,20 @@ function FlightsList({listFlight}: Props): JSX.Element {
                 </div>
                 <div className='card__leg'>
                   <p className="card__leg--title">
-                    {legFromDepartureCity.caption}, {legFromDepartureAirport.caption}, ({legFromDepartureAirport.uid}) - {legFromArrivalCity.caption}, {legFromArrivalAirport.caption} ({legFromArrivalAirport.uid})
+                    {legFromDepartureCity.caption}, {legFromDepartureAirport.caption}, ({legFromDepartureAirport.uid}) &rarr; {legFromArrivalCity.caption}, {legFromArrivalAirport.caption} ({legFromArrivalAirport.uid})
                   </p>
                   <p className="card__leg--date">
-                    {legFromDepartureDate} - {legFromArrivalDate}
+                    {dayjs(legFromDepartureDate).format('HH:mm')} {' '}
+                    {dayjs(legFromDepartureDate).format('DD MMM')} {' '}
+                    {dayjs(legFromDepartureDate).format('dd')}
+                    &emsp;&#128339;&emsp;
+                    {getDurationFormated(legFromDepartureDate, legFromArrivalDate)} &emsp;
+                    {dayjs(legFromArrivalDate).format('DD MMM')} {' '}
+                    {dayjs(legFromArrivalDate).format('dd')} {' '}
+                    {dayjs(legFromArrivalDate).format('HH:mm')}
                   </p>
                   <p className="card__leg--segments">
-                    {legFromSegmentsNumber - 1} пересадка
+                    {legFromSegmentsNumber} пересадка
                   </p>
                   <p className="card__leg--airline">
                     Рейс выполняет: {legFromAirline.caption}
@@ -81,11 +105,11 @@ function FlightsList({listFlight}: Props): JSX.Element {
               </li>
             );
           })}
-        {showMore < listFlight.length && (
+        {showMore && (
           <button
             className="button-more"
             type="button"
-            onClick={() => setShowMore(showMore + 2)}
+            onClick={() => setShowCount(showCount + SHOW_MORE_CNT)}
           >
             Показать еще
           </button>
@@ -93,6 +117,8 @@ function FlightsList({listFlight}: Props): JSX.Element {
       </ul>
     </>
   );
-}
+});
+
+FlightsList.displayName = 'FlightsList';
 
 export default FlightsList;
