@@ -95,7 +95,9 @@ const FlightsList = memo(({listFlight, filters}: Props) => {
                     {dayjs(legFromArrivalDate).format('HH:mm')}
                   </p>
                   <p className="card__leg--segments">
-                    {legFromSegmentsNumber} пересадка
+                    {legFromSegmentsNumber === 0
+                      ? '-------------------------'
+                      : `${legFromSegmentsNumber} пересадка`}
                   </p>
                   <p className="card__leg--airline">
                     Рейс выполняет: {legFromAirline.caption}
